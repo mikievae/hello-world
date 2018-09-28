@@ -1,0 +1,3 @@
+Hi there:
+	I just want to try wether this fuction work, so this document means nothing. sorry :)
+	Now I am try to use cached.
