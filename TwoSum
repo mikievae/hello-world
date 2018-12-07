@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+/**
+ *  * Note: The returned array must be malloced, assume caller calls free().
+ *   */
+int* twoSum(int* nums, int numsSize, int target) {
+    static int num_return[2] = {0};
+    int i =0, j=0;
+    for (i = 0; i < numsSize; i++ )
+    {
+        //if (nums[i] > target)
+            //continue;
+        for (j = i+1;j <numsSize; j++ )
+        {
+            if (nums[j] == (target - nums[i]))
+            {
+                num_return[0]=i;
+                num_return[1]=j;
+                return num_return;
+            }
+
+        }
+    }
+    return num_return;
+}
+
+int main()
+{
+    int num[4]={2,7,11,15};
+    int * result = twoSum(num,4,13);
+    printf("%d, %d",result[0],result[1]);
+}
