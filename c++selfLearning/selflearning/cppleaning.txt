@@ -1,0 +1,182 @@
+/**
+2 变量
+2.1 变量初始化
+->列表初始化 int i{0}； int j(0) 如果是初始元素值的列表，只能在花括号里进行列表初始化 vetctor<string> v1{"a","b","c"};
+->默认初始化 如果定义变量是没有指定初值，则变量被默认初始化。
+---如果是内置类型的变量未被显示初始化，值由定义的位置决定。定义于任何函数体之外的变量被初始化为0.定义在函数体内部的内置变量将不被初始化。
+2.2 变量声明和定义
+-》声明使得名字为程序所知。定义负责创建与名字关联的实体。
+-》声明和定义都规定了变量的类型和名字。但定义还申请存储空间，也可能为变量赋初值。
+-》只声明不定义就在变量名前加extern，而且不要显示初始化变量。
+extern int i;//声明而非定义
+extern int j = 1;//定义
+int I ;//声明也定义
+-》特别的在函数体内试图初始化一个由extern关键字标记的变量会引发错误。
+2.3 引用
+int ival = 1024;
+int &refVal =ival;
+int &refVal2; //错误，必须初始化。初始化完成后，会一直绑定在一起。且无法绑定到另外对象。
+2.4 指针
+vodi* 是一种特殊指针，可以指向任意对象。但是不能操作void*指针所指向的对象。因为对象类型不确定。
+2.5 const
+因为const对象一旦创建后就不能改变，所以必须初始化。
+-》2.5.1 const的引用
+const int ci = 1024;
+const int &r1 = ci;
+为了保证const对象不改变，有些操作不能做。
+int &r2 = ci; //错误，非常量引用指向常量对象是不行的
+-》2.5.2 初始化对const的引用
+引用类型必须与所引用对象类型一致，但有两个例外。
+1.初始化常量引用时可以使用任意表达式作为初始值，只要该表达式能够转换成引用的类型。
+2.目前还不知道，想起来再写-------------------
+const int &i = 7; 
+2.6 指针和const
+-》指向常量的指针
+const double pi = 3.14;
+const double *cptr = &pi
+-》常量指针
+int i = 0;
+int * const ptr = &i;
+->顶层指针
+表示指针本身是常量
+-》底层指针
+表示指针指向的对象是常量
+当拷贝对象时，顶层const不受影响，底层const受影响
+int i = 0;
+const int *p1 = &i;
+int *const p2 = &1;
+int *p3 = p1; //错误，底层const拷贝需谨慎。
+int *p4 = p2; //正确。
+
+3.字符串，向量，数组。
+3.1 string的定义和初始化
+string s1; //默认初始化，为空。
+string s2 = s1;
+string s3 = "abc";
+string s4(10,'c');10个c
+-》直接初始化和拷贝初始化 有'='的是拷贝初始化，编译器把等号右侧的初始值拷贝到新创建的对象中去。
+3.2 vector定义和初始化
+vector<T> v1; 默认初始化，空。
+vector<T> v2(v1);包含v1中的副本。
+vector<T> v3 = v1;
+vector<T> v3 (n,va1);n个val
+vector<T> v4 (n); 包含了N个值初始化的对象；
+vector<T> v5 {a,b,c,d,e};
+vector<T> v5 = {a,b,c,d,e}; 列表初始化。
+3.3 迭代器
+vector<int> v;
+auto a = v.begin();
+auto b = v.end();
+
+3.4 数组
+数组与vector类似，但是大小固定。不存在引用的数组。
+定义数组时必须指定类型，不允许用auto由初始值列表推断类型。
+字符数组
+char a1[] = “c++”; 自动添加表示字符结束的空字符。
+char a2[6] = “abcdef”;错误，没有空间放空字符。
+char a3[] = {‘c’ ,’+’ , ’+’ , ’\0’};
+不能将数组内容拷贝给其他数组作为初始值，也不能用数组为其他数组赋值。（数组名字相当于一个const ptr）
+Int a[] = {1, 2};
+Int a2 [] = a; 错误
+a2 = a; 错误
+
+int *ptr1[10] //包含10个整形指针的数组
+int &ptr2[10]//错误，不存在引用的数组
+int (*ptr3)[10]// 指向数组的指针 
+int (&ptr4)[10]//引用一个数组
+
+6 函数
+6.1传值参数
+当初始化一个非引用类型变量时，初始值被拷贝给变量。对变量的改动不会影响初始值。
+指针形参其实也是不同的指针，但是所指向的对象相同，所以可以简介访问对象。
+拷贝大的类类型对象，或者容器对象比较低效，有些类类型不允许拷贝，所以可以使用引用；
+6.2 const 形参和实参
+顶层const(作用于本身)作为形参时，会忽略。
+void fun(const int i ){}
+void fun(int I ){}这两个函数尽管形式上有差异，但实际上一样。所以第二个重复定义了fun是错的。
+Const int I = 0;
+Int j = I;
+6.3 指针或引用形参与const
+int i = 42;
+const int *cp = &i; T
+const int &r = i;T
+const int &r2 = 43;T
+int *p = cp; 不对，因为这样可以间接修改cp指向的内容，与const冲突。
+int &r3 = r; 不对
+int &r4 = 42;不对，不能用字面值初始化普通引用，只有常量引用才可以这样。
+
+函数同上；
+Void reset(int &i)
+int i = 0;
+const int ci = I;
+string ::size_type ctr = 0;
+reset(&i); 形参是int *;
+reset(&ci) ,错误，指向const int 的指针，这样提供了方式改变ci；
+reset(i);形参是int&;
+reset(ci)形参const int& 不能把普通引用绑定到const 引用上
+reset(42);不能把普通引用绑定在字面值；
+尽量使用常量引用。
+
+6.4含有可变形参的函数
+如果函数的实参数量未知，但是类型相同，可以使用initializer_list类型的形参
+
+6.5返回类型和return语句
+Void函数中可以不用return，因为这类函数最后一句隐式执行return
+其他函数return返回值类型必须与函数的返回值类型相同，或者可以隐式转换。
+不要返回局部对象的引用或指针，因为函数完成后这些对象已经失效了。
+Const string &manip()
+{
+	String ret;
+	If (ret.empty())
+		Return ret;
+	Else
+		Return “Not Empty”
+}
+第一个return返回的是局部变量的引用，第二个字符串字面值转换成一个局部临时对象。 
+
+6.5.1列表初始化返回值
+Vector<string> process()
+{
+	If (a ==0) Return { }; //返回一个空vector
+	Else return {“a”,”b”};返回列表初始化的vector对象。
+
+}
+
+Main函数可以没有return，编译器会隐式插入返回0的return；
+
+6.5.2返回数组指针
+Typedef int arrT[10];arrT类型别名，表示含有10个整数的的数组。
+arrT* func(int i);func 返回指向含有十个整数数组的指针。
+Int (*func(int I ))[10]; 同上，没有使用类型别名。
+Auto func(int i) -> int(*)[10];同上，使用了尾置返回类型。
+Int odd[] = {1,3,5,7,9};
+Decltpye(odd) *arrPtr(int i);返回指向含有5个整数的数组的指针。
+
+6.6函数重载,（数量，类型）
+不允许两个函数返回值不同，形参数量和类型相同。因为无法判断调用哪个函数。
+顶层const不算重载
+Fun(int i);
+Fun(const int i);这两个一样，不算重载。
+Fun(int * const i);
+Func(int * i); 这两个一样。都是顶层const
+
+Fun(int &i);
+Fun(const int &i);新函数，可以调用const对象
+Fun(int *);
+Fun(const int *);新函数。
+
+调用重载函数有三种情况
+->找到一个最佳匹配，并调用函数
+->找不到任何一个匹配，编译器发出无匹配的错误。
+->有多于一个函数可以匹配，但是每一个都不是最佳匹配，此时也将发生错误，叫二义性调用。
+
+6.7特殊用途语言特性
+6.7.1默认实参
+Int I = 0;
+String screen(int high = 0, int width = 80, char backgrnd = ‘ ‘);
+有默认值的在后面，没默认值的在前面。可以省略尾部的实参。
+如果用户不输入参数，参数就使用默认值。
+局部变量不能作为默认实参。
+
+  
+*/
